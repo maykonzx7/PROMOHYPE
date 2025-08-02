@@ -4,6 +4,7 @@ const promotionSchema = new mongoose.Schema({
   title: String,
   price: String,
   link: String,
+  image: String,
   store: String,
   scrapedAt: {
     type: Date,
@@ -11,4 +12,6 @@ const promotionSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model("Promotion", promotionSchema);
+const Promotion = mongoose.model("Promotion", promotionSchema);
+
+export default Promotion;

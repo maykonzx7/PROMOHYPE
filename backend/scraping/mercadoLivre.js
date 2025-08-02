@@ -24,16 +24,42 @@ export default async function scrapeMercadoLivre() {
       page.waitForNavigation({ waitUntil: "networkidle2" }),
     ]);
 
-    // Nova classe mais confiável: ".ui-search-layout__item"
     await page.waitForSelector(".ui-search-layout__item", { timeout: 60000 });
 
     const products = await page.evaluate(() => {
-      return Array.from(document.querySelectorAll(".ui-search-layout__item")).map((item) => ({
-        title: item.querySelector("h2")?.innerText || "Sem título",
-        price: item.querySelector(".price-tag-fraction")?.innerText || "Sem preço",
-        link: item.querySelector("a")?.href || "",
-        store: "Mercado Livre",
-      }));
+      return Array.from(document.querySelectorAll(".ui-search-layout__item")).map((item) => {
+        const title =
+          item.querySelector("h2")?.innerText.trim() ||
+          item.querySelector(".poly-component__title")?.innerText.trim() ||
+          "Sem título";
+
+        const priceContainer = item.querySelector(".poly-price__current");
+        let price;
+        if (priceContainer) {
+          const inteiro = priceContainer.querySelector(".andes-money-amount__fraction")?.innerText.replace(/\D/g, "") || "0";
+          let centavos = priceContainer.querySelector(".andes-money-amount__cents")?.innerText.replace(/\D/g, "") || "00";
+          if (centavos.length === 1) centavos += "0";
+          price = `R$ ${inteiro},${centavos}`;
+        } else {
+          price = item.querySelector(".price-tag-fraction")?.innerText || "Sem preço";
+        }
+
+        const link = item.querySelector("a")?.href || "";
+
+        const imgEl = item.querySelector("img");
+        const image =
+          imgEl?.getAttribute("data-src") ||
+          imgEl?.src ||
+          "Sem imagem";
+
+        return {
+          title,
+          price,
+          link,
+          image,
+          store: "Mercado Livre",
+        };
+      });
     });
 
     await browser.close();
