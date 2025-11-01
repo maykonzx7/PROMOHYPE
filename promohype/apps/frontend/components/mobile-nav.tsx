@@ -1,10 +1,26 @@
 import { Sheet, SheetContent, SheetTrigger } from '@/components/atoms/sheet';
 import { Button } from '@/components/atoms/button';
-import { Menu } from 'lucide-react';
+import { Menu, Home, Tag, Tags, ShoppingCart, BarChart3, Settings, User, Search, Star } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Link from 'next/link';
 
 export function MobileNav() {
+  const navItems = [
+    { title: "Início", url: "/", icon: Home },
+    { title: "Promoções", url: "/promotions", icon: Tag },
+    { title: "Categorias", url: "/categories", icon: Tags },
+    { title: "Busca", url: "/search", icon: Search },
+    { title: "Favoritos", url: "/profile", icon: Star },
+    { title: "Relatórios", url: "/", icon: BarChart3 },
+    { title: "Configurações", url: "/settings", icon: Settings },
+  ];
+
+  const accountItems = [
+    { title: "Perfil", url: "/profile", icon: User },
+    { title: "Pedidos", url: "/orders", icon: ShoppingCart },
+    { title: "Histórico", url: "/history", icon: ShoppingCart },
+  ];
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -15,43 +31,36 @@ export function MobileNav() {
       </SheetTrigger>
       <SheetContent side="right" className="flex flex-col">
         <div className="mt-4 flex flex-col space-y-4">
-          <Link href="/" className="text-base font-medium transition-colors hover:text-foreground/80">
-            Início
-          </Link>
-          <details className="group">
-            <summary className="flex justify-between items-center text-base font-medium cursor-pointer list-none">
-              <span>Lojas</span>
-              <svg className="w-4 h-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-              </svg>
-            </summary>
-            <div className="pl-4 mt-2 space-y-2">
-              <Link href="/promotions" className="block text-base font-medium transition-colors hover:text-foreground/80">
-                Todas as Promoções
+          <div className="space-y-2">
+            {navItems.map((item) => (
+              <Link 
+                key={item.title} 
+                href={item.url} 
+                className="flex items-center gap-2 text-base font-medium transition-colors hover:text-foreground/80"
+              >
+                <item.icon className="h-4 w-4" />
+                <span>{item.title}</span>
               </Link>
-              <Link href="/search" className="block text-base font-medium transition-colors hover:text-foreground/80">
-                Buscar Promoções
+            ))}
+          </div>
+          
+          <div className="pt-4 space-y-2 border-t pt-4">
+            <h3 className="text-sm font-semibold">Minha Conta</h3>
+            {accountItems.map((item) => (
+              <Link 
+                key={item.title} 
+                href={item.url} 
+                className="flex items-center gap-2 text-base font-medium transition-colors hover:text-foreground/80"
+              >
+                <item.icon className="h-4 w-4" />
+                <span>{item.title}</span>
               </Link>
-              <Link href="/categories" className="block text-base font-medium transition-colors hover:text-foreground/80">
-                Categorias
-              </Link>
-            </div>
-          </details>
-          <Link href="/about" className="text-base font-medium transition-colors hover:text-foreground/80">
-            Sobre
-          </Link>
-          <Link href="/contact" className="text-base font-medium transition-colors hover:text-foreground/80">
-            Contato
-          </Link>
+            ))}
+          </div>
+          
           <div className="pt-4 space-y-2">
-            <Link href="/profile">
-              <Button variant="outline" className="w-full">Perfil</Button>
-            </Link>
             <Link href="/auth">
-              <Button variant="outline" className="w-full">Entrar</Button>
-            </Link>
-            <Link href="/auth">
-              <Button className="w-full">Cadastrar</Button>
+              <Button variant="default" className="w-full">Entrar / Cadastrar</Button>
             </Link>
           </div>
         </div>
