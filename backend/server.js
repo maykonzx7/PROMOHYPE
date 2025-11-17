@@ -3,6 +3,9 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import promotionsRoute from "./routes/promotions.js";
+import categoriesRoute from "./routes/categories.js";
+import authRoute from "./routes/auth.js";
+import statsRoute from "./routes/stats.js";
 
 dotenv.config();
 const app = express();
@@ -18,6 +21,9 @@ mongoose
 
 // Rotas
 app.use("/api/promotions", promotionsRoute);
+app.use("/api/categories", categoriesRoute);
+app.use("/api/auth", authRoute);
+app.use("/api/stats", statsRoute);
 
 // Inicializa servidor
 const PORT = process.env.PORT || 3000;
