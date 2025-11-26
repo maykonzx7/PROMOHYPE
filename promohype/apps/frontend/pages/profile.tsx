@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Head from 'next/head';
 import Layout from '@/components/layout';
+import MainTemplate from '@/components/templates/MainTemplate';
 import { Button } from '@/components/atoms/button';
 import { Input } from '@/components/atoms/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/atoms/card';
@@ -23,14 +24,14 @@ export default function ProfilePage() {
       id: '1',
       title: 'Notebook Ultrafino com Intel Core i7',
       price: 'R$ 3.499,99',
-      store: 'Loja A',
+      store: 'Mercado Livre',
       date: '2023-05-15'
     },
     {
       id: '2',
       title: 'Smart TV 55" 4K UHD',
       price: 'R$ 2.499,99',
-      store: 'Loja C',
+      store: 'Magazine Luiza',
       date: '2023-05-18'
     }
   ]);
@@ -52,15 +53,13 @@ export default function ProfilePage() {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      <MainTemplate title="Perfil do Usuário">
         <Head>
           <title>Perfil - Promohype</title>
           <meta name="description" content="Gerencie seu perfil no Promohype" />
         </Head>
         
-        <main className="container mx-auto px-4 py-8">
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Perfil do Usuário</h1>
+        <div className="max-w-4xl mx-auto">
             
             <Tabs defaultValue="profile" className="w-full">
               <TabsList className="grid w-full grid-cols-3">
@@ -76,12 +75,12 @@ export default function ProfilePage() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex items-center space-x-6">
-                      <div className="bg-gray-200 dark:bg-gray-700 border-2 border-dashed rounded-xl w-16 h-16" />
+                      <div className="bg-muted border-2 border-dashed rounded-xl w-16 h-16" />
                       <Button variant="outline">Alterar Foto</Button>
                     </div>
                     
                     <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      <label htmlFor="name" className="block text-sm font-medium text-foreground mb-1">
                         Nome
                       </label>
                       <Input
@@ -94,7 +93,7 @@ export default function ProfilePage() {
                     </div>
                     
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1">
                         E-mail
                       </label>
                       <Input
@@ -107,7 +106,7 @@ export default function ProfilePage() {
                     </div>
                     
                     <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-1">
                         Telefone
                       </label>
                       <Input
@@ -135,8 +134,8 @@ export default function ProfilePage() {
                   <CardContent className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h3 className="font-medium text-gray-900 dark:text-white">Notificações</h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                        <h3 className="font-medium text-foreground">Notificações</h3>
+                        <p className="text-sm text-muted-foreground">
                           Receber notificações sobre promoções relevantes
                         </p>
                       </div>
@@ -199,11 +198,11 @@ export default function ProfilePage() {
                         {savedPromotions.map((promotion) => (
                           <div 
                             key={promotion.id} 
-                            className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                            className="flex items-center justify-between p-4 border border-border rounded-lg hover:bg-accent/50"
                           >
                             <div>
-                              <h3 className="font-medium text-gray-900 dark:text-white">{promotion.title}</h3>
-                              <p className="text-sm text-gray-500 dark:text-gray-400">
+                              <h3 className="font-medium text-foreground">{promotion.title}</h3>
+                              <p className="text-sm text-muted-foreground">
                                 {promotion.store} • {new Date(promotion.date).toLocaleDateString('pt-BR')}
                               </p>
                             </div>
@@ -219,7 +218,7 @@ export default function ProfilePage() {
                       </div>
                     ) : (
                       <div className="text-center py-8">
-                        <p className="text-gray-500 dark:text-gray-400">
+                        <p className="text-muted-foreground">
                           Você ainda não salvou nenhuma promoção.
                         </p>
                       </div>
@@ -229,8 +228,7 @@ export default function ProfilePage() {
               </TabsContent>
             </Tabs>
           </div>
-        </main>
-      </div>
+        </MainTemplate>
     </Layout>
   );
 }

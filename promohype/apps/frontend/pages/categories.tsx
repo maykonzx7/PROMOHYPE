@@ -34,7 +34,7 @@ export default function CategoriesPage() {
       <MainTemplate title="Categorias">
         {loading ? (
           <div className="text-center py-12">
-            <p className="text-xl text-gray-600 dark:text-gray-300">Carregando categorias...</p>
+            <p className="text-xl text-muted-foreground">Carregando categorias...</p>
           </div>
         ) : (
           <CategoryList categories={categories} />

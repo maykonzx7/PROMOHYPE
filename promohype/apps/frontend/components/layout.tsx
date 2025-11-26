@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Button } from '@/components/atoms/button';
@@ -12,24 +14,20 @@ import {
   SidebarInset
 } from '@/components/ui/sidebar';
 import { NewSidebar } from '@/components/new-sidebar';
+import { TooltipProvider } from '@/components/atoms/tooltip';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <SidebarProvider>
-      <NewSidebar />
-      <SidebarInset>
-        <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
-          <div className="container flex h-16 items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Link href="/" className="flex items-center space-x-2">
-                <span className="text-xl font-bold">Promohype</span>
-              </Link>
-            </div>
-            <div className="flex items-center gap-2">
+    <TooltipProvider delayDuration={100}>
+      <SidebarProvider>
+        <NewSidebar />
+        <SidebarInset>
+          <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
+            <div className="flex h-14 items-center justify-end px-4 gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild className="hidden md:block">
                   <Button variant="ghost" size="sm" className="relative">
-                    <span className="absolute w-2 h-2 bg-green-500 rounded-full top-2 right-2 ring-2 ring-white"></span>
+                    <span className="absolute w-2 h-2 bg-green-500 rounded-full top-2 right-2 ring-2 ring-background"></span>
                     Perfil
                   </Button>
                 </DropdownMenuTrigger>
@@ -48,18 +46,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              <div className="md:ml-2">
-                <ThemeToggle />
-              </div>
+              <ThemeToggle />
             </div>
-          </div>
-        </header>
-        <main className="flex-1 py-6">
-          <div className="container">
-            {children}
-          </div>
+          </header>
+        <main className="flex-1 w-full">
+          {children}
         </main>
-        <footer className="py-6 border-t">
+        <footer className="py-6 border-t bg-muted/30">
           <div className="container">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               <div>
@@ -88,9 +81,39 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <div>
                 <h3 className="text-sm font-semibold mb-4">Redes Sociais</h3>
                 <ul className="space-y-2">
-                  <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground">Facebook</a></li>
-                  <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground">Instagram</a></li>
-                  <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground">Twitter</a></li>
+                  <li>
+                    <a 
+                      href="https://facebook.com/promohype" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      aria-label="Visite nossa página no Facebook"
+                    >
+                      Facebook
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="https://instagram.com/promohype" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      aria-label="Visite nosso perfil no Instagram"
+                    >
+                      Instagram
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="https://twitter.com/promohype" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      aria-label="Visite nosso perfil no Twitter"
+                    >
+                      Twitter
+                    </a>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -101,5 +124,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </footer>
       </SidebarInset>
     </SidebarProvider>
+    </TooltipProvider>
   );
 }

@@ -27,13 +27,18 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/a
 // Fetch all promotions
 export const fetchPromotions = async (): Promise<Promotion[]> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/promotions`);
+    const url = `${API_BASE_URL}/promotions`;
+    console.log('🔍 Buscando promoções em:', url);
+    const response = await fetch(url);
+    console.log('📡 Resposta recebida:', response.status, response.statusText);
     if (!response.ok) {
       throw new Error(`Erro ao buscar promoções: ${response.status}`);
     }
-    return response.json();
+    const data = await response.json();
+    console.log('✅ Promoções recebidas:', data.length);
+    return data;
   } catch (error) {
-    console.error('Erro ao buscar promoções:', error);
+    console.error('❌ Erro ao buscar promoções:', error);
     throw error;
   }
 };

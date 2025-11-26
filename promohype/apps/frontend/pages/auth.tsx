@@ -27,33 +27,32 @@ export default function AuthPage() {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      <div className="min-h-screen flex items-center justify-center w-full">
         <Head>
           <title>{isLogin ? 'Login' : 'Cadastro'} - Promohype</title>
           <meta name="description" content={`Faça ${isLogin ? 'login' : 'cadastro'} no Promohype`} />
         </Head>
         
-        <main className="container mx-auto px-4 py-8 flex items-center justify-center">
-          <div className="max-w-md w-full">
-            <Card className="w-full">
-              <CardHeader className="text-center">
-                <CardTitle className="text-2xl font-bold">
-                  {isLogin ? 'Entrar no Promohype' : 'Criar Conta'}
-                </CardTitle>
-                <CardDescription>
-                  {isLogin 
-                    ? 'Acesse sua conta para ver promoções personalizadas' 
-                    : 'Crie uma conta para salvar promoções e receber alertas'}
-                </CardDescription>
-              </CardHeader>
-              
-              <CardContent>
-                <form onSubmit={handleSubmit}>
-                  {!isLogin && (
-                    <div className="mb-4">
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Nome
-                      </label>
+        <div className="max-w-md w-full px-4">
+          <Card className="w-full">
+            <CardHeader className="text-center">
+              <CardTitle className="text-2xl font-bold">
+                {isLogin ? 'Entrar no Promohype' : 'Criar Conta'}
+              </CardTitle>
+              <CardDescription>
+                {isLogin 
+                  ? 'Acesse sua conta para ver promoções personalizadas' 
+                  : 'Crie uma conta para salvar promoções e receber alertas'}
+              </CardDescription>
+            </CardHeader>
+            
+            <CardContent>
+              <form onSubmit={handleSubmit}>
+                {!isLogin && (
+                  <div className="mb-4">
+                    <label htmlFor="name" className="block text-sm font-medium text-foreground mb-1">
+                      Nome
+                    </label>
                       <Input
                         id="name"
                         name="name"
@@ -67,7 +66,7 @@ export default function AuthPage() {
                   )}
                   
                   <div className="mb-4">
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1">
                       E-mail
                     </label>
                     <Input
@@ -115,7 +114,7 @@ export default function AuthPage() {
                   
                   {isLogin && (
                     <div className="flex justify-end mb-4">
-                      <a href="/reset-password" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                      <a href="/reset-password" className="text-sm text-primary hover:underline">
                         Esqueceu sua senha?
                       </a>
                     </div>
@@ -130,7 +129,7 @@ export default function AuthPage() {
               <CardFooter className="flex flex-col">
                 <div className="relative w-full mb-4">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
+                    <div className="w-full border-t border-border"></div>
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
                     <span className="bg-background px-2 text-muted-foreground">
@@ -148,11 +147,11 @@ export default function AuthPage() {
                   </Button>
                 </div>
                 
-                <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+                <div className="mt-6 text-center text-sm text-muted-foreground">
                   {isLogin ? "Não tem uma conta? " : "Já tem uma conta? "}
                   <a 
                     href="#" 
-                    className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+                    className="text-foreground hover:text-primary transition-colors cursor-pointer"
                     onClick={(e) => {
                       e.preventDefault();
                       setIsLogin(!isLogin);
@@ -164,8 +163,7 @@ export default function AuthPage() {
               </CardFooter>
             </Card>
           </div>
-        </main>
-      </div>
+        </div>
     </Layout>
   );
 }

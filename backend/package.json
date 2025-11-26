@@ -8,6 +8,8 @@
     "start": "node server.js",
     "dev": "node server.js",
     "scrape": "node services/savepromotion.js",
+    "scrape:worker": "node services/scrapingWorker.js",
+    "scrape:start": "START_SCHEDULER=true node server.js",
     "create-admin": "node scripts/createAdmin.js"
   },
   "keywords": [],

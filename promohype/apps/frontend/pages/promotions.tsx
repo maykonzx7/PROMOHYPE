@@ -8,6 +8,7 @@ import PromotionList from '@/components/organisms/PromotionList';
 import { fetchPromotions, Promotion } from '@/services/api';
 
 export default function PromotionsPage() {
+  const [allPromotions, setAllPromotions] = useState<Promotion[]>([]);
   const [promotions, setPromotions] = useState<Promotion[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
@@ -20,7 +21,9 @@ export default function PromotionsPage() {
   useEffect(() => {
     const getPromotions = async () => {
       try {
+        setLoading(true);
         const data = await fetchPromotions();
+        setAllPromotions(data);
         setPromotions(data);
       } catch (error) {
         console.error('Erro ao buscar promoções:', error);
@@ -31,6 +34,52 @@ export default function PromotionsPage() {
 
     getPromotions();
   }, []);
+
+  const applyFilters = () => {
+    let filtered = [...allPromotions];
+
+    // Filtro por categoria
+    if (filters.category) {
+      filtered = filtered.filter(promo => 
+        promo.category?.toLowerCase().includes(filters.category.toLowerCase())
+      );
+    }
+
+    // Filtro por loja
+    if (filters.store) {
+      filtered = filtered.filter(promo => promo.store === filters.store);
+    }
+
+    // Filtro por preço mínimo
+    if (filters.minPrice) {
+      const minPriceValue = parseFloat(filters.minPrice);
+      filtered = filtered.filter(promo => {
+        const priceValue = parseFloat(promo.price.replace(/[^\d,.-]/g, '').replace(',', '.'));
+        return !isNaN(priceValue) && priceValue >= minPriceValue;
+      });
+    }
+
+    // Filtro por preço máximo
+    if (filters.maxPrice) {
+      const maxPriceValue = parseFloat(filters.maxPrice);
+      filtered = filtered.filter(promo => {
+        const priceValue = parseFloat(promo.price.replace(/[^\d,.-]/g, '').replace(',', '.'));
+        return !isNaN(priceValue) && priceValue <= maxPriceValue;
+      });
+    }
+
+    setPromotions(filtered);
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      category: '',
+      minPrice: '',
+      maxPrice: '',
+      store: '',
+    });
+    setPromotions(allPromotions);
+  };
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -49,26 +98,24 @@ export default function PromotionsPage() {
       
       <MainTemplate title="Todas as Promoções">
         {/* Filtros */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
+        <div className="bg-card rounded-xl shadow-md p-6 mb-8 border border-border">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Categoria</label>
+              <label className="block text-sm font-medium text-foreground mb-1">Categoria</label>
               <select 
                 name="category"
                 value={filters.category}
                 onChange={handleFilterChange}
-                className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full p-2 border border-border rounded-md bg-background text-foreground"
               >
                 <option value="">Todas</option>
-                <option value="eletronics">Eletrônicos</option>
-                <option value="fashion">Moda</option>
-                <option value="home">Casa</option>
-                <option value="sports">Esportes</option>
+                <option value="Eletrônicos">Eletrônicos</option>
+                <option value="Geral">Geral</option>
               </select>
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Preço Mínimo</label>
+              <label className="block text-sm font-medium text-foreground mb-1">Preço Mínimo</label>
               <Input 
                 name="minPrice"
                 type="number" 
@@ -92,25 +139,26 @@ export default function PromotionsPage() {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Loja</label>
+              <label className="block text-sm font-medium text-foreground mb-1">Loja</label>
               <select 
                 name="store"
                 value={filters.store}
                 onChange={handleFilterChange}
-                className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full p-2 border border-border rounded-md bg-background text-foreground"
               >
                 <option value="">Todas</option>
-                <option value="Loja A">Loja A</option>
-                <option value="Loja B">Loja B</option>
-                <option value="Loja C">Loja C</option>
-                <option value="Loja D">Loja D</option>
+                <option value="Mercado Livre">Mercado Livre</option>
+                <option value="Casas Bahia">Casas Bahia</option>
+                <option value="Magazine Luiza">Magazine Luiza</option>
               </select>
             </div>
           </div>
           
           <div className="mt-4 flex justify-end">
-            <Button variant="outline" className="mr-2">Limpar Filtros</Button>
-            <Button>Aplicar Filtros</Button>
+            <Button variant="outline" className="mr-2" onClick={clearFilters}>
+              Limpar Filtros
+            </Button>
+            <Button onClick={applyFilters}>Aplicar Filtros</Button>
           </div>
         </div>
         
@@ -123,7 +171,7 @@ export default function PromotionsPage() {
             <Button variant="outline" size="sm" disabled>
               Anterior
             </Button>
-            <Button variant="outline" size="sm" className="bg-blue-600 text-white hover:bg-blue-700">
+            <Button variant="outline" size="sm">
               1
             </Button>
             <Button variant="outline" size="sm">
