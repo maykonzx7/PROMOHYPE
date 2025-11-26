@@ -5,8 +5,17 @@ import scrapeCasasBahia from "./casasBahia.js";
 /**
  * Serviço centralizado de scraping
  * Executa todos os scrapers e retorna todas as promoções encontradas
+ * 
+ * @param {Array} searchTerms - Termos de busca
+ * @param {Object} crawlingOptions - Opções de crawling para Mercado Livre
+ * @param {number} crawlingOptions.maxPages - Número máximo de páginas (padrão: 3)
+ * @param {boolean} crawlingOptions.visitProductPages - Visitar páginas individuais (padrão: false)
+ * @param {number} crawlingOptions.maxProductsPerPage - Máximo de produtos por página (padrão: 20)
  */
-export default async function searchHype(searchTerms = ['smartphone', 'notebook', 'tv', 'headphone', 'tablet']) {
+export default async function searchHype(
+  searchTerms = ['smartphone', 'notebook', 'tv', 'headphone', 'tablet'],
+  crawlingOptions = {}
+) {
   console.log("🚀 Iniciando scraping de todas as lojas...");
   console.log(`📦 Termos de busca: ${searchTerms.join(", ")}`);
   
@@ -18,7 +27,8 @@ export default async function searchHype(searchTerms = ['smartphone', 'notebook'
     {
       name: "Mercado Livre",
       scraper: scrapeMercadoLivre,
-      searchTerms
+      searchTerms,
+      options: crawlingOptions // Passar opções de crawling
     },
     {
       name: "Magazine Luiza",
@@ -34,10 +44,13 @@ export default async function searchHype(searchTerms = ['smartphone', 'notebook'
 
   // Executar todos os scrapers
   const results = await Promise.allSettled(
-    scrapers.map(async ({ name, scraper, searchTerms }) => {
+    scrapers.map(async ({ name, scraper, searchTerms, options }) => {
       try {
         console.log(`\n🛒 Iniciando scraping: ${name}`);
-        const promotions = await scraper(searchTerms);
+        // Passar opções apenas para Mercado Livre (que suporta crawling)
+        const promotions = options 
+          ? await scraper(searchTerms, options)
+          : await scraper(searchTerms);
         console.log(`✓ ${name}: ${promotions.length} promoções encontradas`);
         return { name, promotions };
       } catch (error) {

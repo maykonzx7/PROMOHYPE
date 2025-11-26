@@ -10,6 +10,8 @@ interface Promotion {
   image: string;
   store: string;
   scrapedAt: string;
+  installments?: number;
+  installmentValue?: string;
 }
 
 interface PromotionListProps {

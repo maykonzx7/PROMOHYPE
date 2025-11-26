@@ -2,6 +2,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Garantir que a classe .dark seja aplicada no HTML */
+html.dark {
+  color-scheme: dark;
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -77,12 +82,8 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* Media query removida para permitir controle total do next-themes */
+/* O tema agora é controlado apenas pela classe .dark no HTML */
 
 body {
   background: var(--background);
@@ -90,6 +91,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Dark mode - aplicado quando a classe .dark está no elemento HTML */
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);

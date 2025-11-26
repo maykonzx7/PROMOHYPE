@@ -15,7 +15,13 @@ const promotionSchema = new mongoose.Schema({
   hasPromotion: { type: Boolean, default: false }, // Se tem promoção ativa
   installments: { type: Number }, // Número máximo de parcelas
   installmentValue: { type: String }, // Valor da parcela (ex: "R$ 299,90 em até 10x")
-  availability: { type: Boolean, default: true }, 
+  availability: { type: Boolean, default: true },
+  // Campos adicionais coletados via crawling
+  specifications: { type: Array }, // Especificações do produto [{key, value}]
+  rating: { type: String }, // Avaliação média do produto
+  reviewsCount: { type: String }, // Número de avaliações
+  condition: { type: String }, // Condição do produto (novo, usado, etc.)
+  seller: { type: String }, // Nome do vendedor
   scrapedAt: {
     type: Date,
     default: Date.now,

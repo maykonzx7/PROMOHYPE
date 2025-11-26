@@ -172,6 +172,47 @@ export default function PromotionDetailPage() {
                 <span className="text-green-600 dark:text-green-400 font-bold">{promotion.discount}</span>
               </div>
             </div>
+
+            {/* Parcelamento - Exibição Visual Detalhada */}
+            {(promotion.installments || promotion.installmentValue) && (
+              <div className="mb-6 p-4 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl border-2 border-primary/20">
+                <div className="text-center mb-3">
+                  <h3 className="text-sm font-semibold text-muted-foreground mb-2">Parcelamento</h3>
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <span className="text-4xl font-bold text-primary">
+                      {promotion.installments || 'N/A'}
+                    </span>
+                    <span className="text-2xl text-muted-foreground">x</span>
+                  </div>
+                  {promotion.installmentValue && (
+                    <p className="text-sm text-foreground mb-3">
+                      {promotion.installmentValue}
+                    </p>
+                  )}
+                </div>
+                
+                <div className="flex items-center justify-center">
+                  {promotion.installmentValue && (
+                    promotion.installmentValue.includes('sem juros') || 
+                    promotion.installmentValue.toLowerCase().includes('sem juro') ? (
+                      <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/20 border-2 border-green-500/50 text-green-700 dark:text-green-300 text-sm font-bold rounded-full">
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        <span>SEM JUROS</span>
+                      </div>
+                    ) : (
+                      <div className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-500/20 border-2 border-yellow-500/50 text-yellow-700 dark:text-yellow-300 text-sm font-bold rounded-full">
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                        </svg>
+                        <span>COM JUROS</span>
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
+            )}
             
             <div className="mb-6">
               <div className={`text-center py-2 px-4 rounded-lg font-medium ${

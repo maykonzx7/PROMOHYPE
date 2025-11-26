@@ -12,6 +12,8 @@ export interface Promotion {
   currentPrice?: string;
   discount?: string;
   availability?: boolean;
+  installments?: number;
+  installmentValue?: string;
 }
 
 export interface Category {
