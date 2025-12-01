@@ -23,17 +23,32 @@ export interface Category {
   image: string;
 }
 
-// Base API URL - usando variável de ambiente ou default local
-// Em produção (Vercel), configure NEXT_PUBLIC_API_BASE_URL, ex:
-// https://promohype-backend.vercel.app
-// Em desenvolvimento, o default aponta para o backend local na porta 5000
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
+// Base API URL - usando variável de ambiente ou default
+// Compatível com:
+// - NEXT_PUBLIC_API_BASE_URL = "https://backend"        (formato antigo, sem /api)
+// - NEXT_PUBLIC_API_BASE_URL = "https://backend/api"    (se já tiver sido configurado assim)
+// - NEXT_PUBLIC_API_URL       = "https://backend" ou "https://backend/api"
+const rawApiEnv =
+  process.env.NEXT_PUBLIC_API_BASE_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  "http://localhost:5000";
+
+// Normaliza removendo barras finais e um /api extra, se existir
+const normalizedApiBase = (() => {
+  let base = rawApiEnv.replace(/\/+$/, "");
+  if (base.toLowerCase().endsWith("/api")) {
+    base = base.slice(0, -4);
+  }
+  return base;
+})();
+
+// Endpoint real da API sempre será base + /api
+const API_BASE_URL = `${normalizedApiBase}/api`;
 
 // Fetch all promotions
 export const fetchPromotions = async (): Promise<Promotion[]> => {
   try {
-    const url = `${API_BASE_URL}/api/promotions`;
+    const url = `${API_BASE_URL}/promotions`;
     console.log('🔍 Buscando promoções em:', url);
     const response = await fetch(url);
     console.log('📡 Resposta recebida:', response.status, response.statusText);
@@ -52,7 +67,7 @@ export const fetchPromotions = async (): Promise<Promotion[]> => {
 // Fetch promotions by category
 export const fetchPromotionsByCategory = async (category: string): Promise<Promotion[]> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/promotions?category=${category}`);
+    const response = await fetch(`${API_BASE_URL}/promotions?category=${category}`);
     if (!response.ok) {
       throw new Error(`Erro ao buscar promoções por categoria: ${response.status}`);
     }
@@ -66,7 +81,7 @@ export const fetchPromotionsByCategory = async (category: string): Promise<Promo
 // Fetch promotions by search query
 export const fetchPromotionsBySearch = async (query: string): Promise<Promotion[]> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/promotions?search=${encodeURIComponent(query)}`);
+    const response = await fetch(`${API_BASE_URL}/promotions?search=${encodeURIComponent(query)}`);
     if (!response.ok) {
       throw new Error(`Erro ao buscar promoções: ${response.status}`);
     }
@@ -80,7 +95,7 @@ export const fetchPromotionsBySearch = async (query: string): Promise<Promotion[
 // Fetch promotion by ID
 export const fetchPromotionById = async (id: string): Promise<Promotion> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/promotions/${id}`);
+    const response = await fetch(`${API_BASE_URL}/promotions/${id}`);
     if (!response.ok) {
       throw new Error(`Erro ao buscar promoção: ${response.status}`);
     }
@@ -94,7 +109,7 @@ export const fetchPromotionById = async (id: string): Promise<Promotion> => {
 // Fetch all categories
 export const fetchCategories = async (): Promise<Category[]> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/categories`); // Endpoint de categorias
+    const response = await fetch(`${API_BASE_URL}/categories`); // Endpoint de categorias
     if (!response.ok) {
       throw new Error(`Erro ao buscar categorias: ${response.status}`);
     }
