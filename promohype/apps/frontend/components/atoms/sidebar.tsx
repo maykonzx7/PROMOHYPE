@@ -136,7 +136,7 @@ const SidebarProvider = React.forwardRef<
             "--sidebar-width": SIDEBAR_WIDTH,
             "--sidebar-width-mobile": SIDEBAR_WIDTH_MOBILE,
             ...style,
-          }}
+          } as React.CSSProperties}
           className={cn(
             "group/sidebar-wrapper flex min-h-svh w-full has-[[data-variant=inset]]:bg-sidebar",
             className
@@ -279,7 +279,7 @@ function SidebarTrigger({
 }
 
 // Sidebar Rail
-function SidebarRail({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+function SidebarRail({ className, onClick, ...props }: React.HTMLAttributes<HTMLButtonElement>) {
   const { toggleSidebar } = useSidebar()
 
   return (
@@ -287,7 +287,11 @@ function SidebarRail({ className, ...props }: React.HTMLAttributes<HTMLDivElemen
       data-sidebar="rail"
       aria-label="Toggle Sidebar"
       tabIndex={-1}
-      onClick={toggleSidebar}
+      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        toggleSidebar()
+        onClick?.(e)
+      }}
       title="Toggle Sidebar"
       className={cn(
         "absolute inset-y-0 z-10 hidden w-4 -translate-x-1/2 transition-all ease-linear after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] hover:after:bg-sidebar-border group-data-[collapsible=icon]:cursor-pointer group-data-[side=right]:-left-4 group-data-[side=left]:right-0 sm:flex",
@@ -447,7 +451,9 @@ SidebarGroupLabel.displayName = "SidebarGroupLabel"
 // SidebarGroupAction
 const SidebarGroupAction = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentProps<"button">
+  React.ComponentProps<"button"> & {
+    asChild?: boolean
+  }
 >(({ className, asChild = false, ...props }, ref) => {
   const Comp = asChild ? Slot : "button"
 
@@ -594,7 +600,7 @@ const SidebarMenuButton = React.forwardRef<
             hidden={state === "expanded"}
             className="text-xs"
           >
-            {typeof tooltip === "string" ? tooltip : tooltip.children}
+            {tooltip}
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -608,6 +614,7 @@ const SidebarMenuAction = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<"button"> & {
     showOnHover?: boolean
+    asChild?: boolean
   }
 >(({ className, showOnHover = false, asChild = false, ...props }, ref) => {
   const Comp = asChild ? Slot : "button"

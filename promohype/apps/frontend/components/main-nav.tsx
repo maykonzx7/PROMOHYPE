@@ -1,4 +1,7 @@
+'use client';
+
 import * as React from 'react';
+import { usePathname } from 'next/navigation';
 import { MobileNav } from './mobile-nav';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Link from 'next/link';
@@ -16,6 +19,15 @@ import {
 import { cn } from '@/lib/utils';
 
 export function MainNav({ className = "" }: { className?: string }) {
+  const pathname = usePathname();
+  
+  const isActive = (path: string) => {
+    if (path === "/") {
+      return pathname === "/";
+    }
+    return pathname?.startsWith(path);
+  };
+
   return (
     <div className={`flex items-center justify-between md:justify-normal md:space-x-8 ${className}`}>
       <Link href="/" className="flex items-center space-x-2">
@@ -25,10 +37,10 @@ export function MainNav({ className = "" }: { className?: string }) {
         <NavigationMenuList>
           <NavigationMenuItem>
             <Link href="/" legacyBehavior passHref>
-              <NavigationMenuLink className={({ isActive }) => 
-                cn("text-sm font-medium transition-colors hover:text-foreground/80", 
-                  isActive ? 'text-foreground' : 'text-muted-foreground')
-              }>
+              <NavigationMenuLink className={cn(
+                "text-sm font-medium transition-colors hover:text-foreground/80",
+                isActive("/") ? 'text-foreground' : 'text-muted-foreground'
+              )}>
                 Início
               </NavigationMenuLink>
             </Link>
@@ -68,20 +80,20 @@ export function MainNav({ className = "" }: { className?: string }) {
           </NavigationMenuItem>
           <NavigationMenuItem>
             <Link href="/about" legacyBehavior passHref>
-              <NavigationMenuLink className={({ isActive }) => 
-                cn("text-sm font-medium transition-colors hover:text-foreground/80", 
-                  isActive ? 'text-foreground' : 'text-muted-foreground')
-              }>
+              <NavigationMenuLink className={cn(
+                "text-sm font-medium transition-colors hover:text-foreground/80",
+                isActive("/about") ? 'text-foreground' : 'text-muted-foreground'
+              )}>
                 Sobre
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
             <Link href="/contact" legacyBehavior passHref>
-              <NavigationMenuLink className={({ isActive }) => 
-                cn("text-sm font-medium transition-colors hover:text-foreground/80", 
-                  isActive ? 'text-foreground' : 'text-muted-foreground')
-              }>
+              <NavigationMenuLink className={cn(
+                "text-sm font-medium transition-colors hover:text-foreground/80",
+                isActive("/contact") ? 'text-foreground' : 'text-muted-foreground'
+              )}>
                 Contato
               </NavigationMenuLink>
             </Link>

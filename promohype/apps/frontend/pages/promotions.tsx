@@ -38,12 +38,12 @@ export default function PromotionsPage() {
   const applyFilters = () => {
     let filtered = [...allPromotions];
 
-    // Filtro por categoria
-    if (filters.category) {
-      filtered = filtered.filter(promo => 
-        promo.category?.toLowerCase().includes(filters.category.toLowerCase())
-      );
-    }
+    // Filtro por categoria - removido pois Promotion não tem propriedade category
+    // if (filters.category) {
+    //   filtered = filtered.filter(promo => 
+    //     promo.category?.toLowerCase().includes(filters.category.toLowerCase())
+    //   );
+    // }
 
     // Filtro por loja
     if (filters.store) {

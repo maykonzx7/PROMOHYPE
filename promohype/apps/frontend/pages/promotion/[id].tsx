@@ -4,6 +4,7 @@ import Layout from '@/components/layout';
 import { Button } from '@/components/atoms/button';
 import { Card, CardContent } from '@/components/atoms/card';
 import PromotionDetailTemplate from '@/components/templates/PromotionDetailTemplate';
+import MainTemplate from '@/components/templates/MainTemplate';
 import PromotionList from '@/components/organisms/PromotionList';
 import { fetchPromotionById, fetchPromotions, Promotion } from '@/services/api';
 
